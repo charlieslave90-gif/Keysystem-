@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>KeySystem | Anti-Bypass Gateway</title>
+    <title>KeySystem | Unlock & Access</title>
     
     <!-- Linkvertise Publisher Script -->
     <script src="https://publisher.linkvertise.com/cdn/linkvertise.js"></script>
     <script>
-        // Linkvertise configuration with anti-bypass support
         linkvertise(4752730, {
             whitelist: ["https://keysystem-ruddy.vercel.app/", "", window.location.origin + "/"],
             blacklist: []
@@ -23,47 +22,47 @@
         }
 
         body {
-            background: #0f172a;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #e8eef2;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
             min-height: 100vh;
-            padding: 30px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
-        .wrapper {
-            max-width: 550px;
-            margin: 0 auto;
-        }
-
-        .key-card {
+        .container {
+            max-width: 480px;
+            width: 100%;
             background: white;
             border-radius: 28px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            padding: 36px 32px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 32px 28px;
             text-align: center;
         }
 
         h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #0f172a;
-            margin-bottom: 8px;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #1e2a3a;
+            margin-bottom: 6px;
         }
 
         .subhead {
-            color: #64748b;
-            font-size: 0.85rem;
-            border-bottom: 2px solid #e2e8f0;
+            color: #6c7a8a;
+            font-size: 0.8rem;
+            border-bottom: 1px solid #e2e8f0;
             display: inline-block;
-            padding-bottom: 8px;
-            margin-bottom: 28px;
+            padding-bottom: 6px;
+            margin-bottom: 24px;
         }
 
         .gui-panel {
-            background: #f8fafc;
-            border-radius: 24px;
-            padding: 30px 24px;
-            margin: 20px 0;
-            border: 1px solid #e2e8f0;
+            background: #f7f9fc;
+            border-radius: 20px;
+            padding: 28px 20px;
+            margin: 16px 0 20px;
+            border: 1px solid #e2edf2;
         }
 
         .status-area {
@@ -72,56 +71,55 @@
             justify-content: center;
             gap: 12px;
             background: white;
-            padding: 10px 20px;
+            padding: 10px 18px;
             border-radius: 60px;
             width: fit-content;
             margin: 0 auto 24px auto;
-            border: 1px solid #cbd5e1;
+            border: 1px solid #dee4e9;
         }
 
         .lock-dot {
             width: 12px;
             height: 12px;
-            background: #ef4444;
+            background: #e74c3c;
             border-radius: 50%;
             transition: 0.2s;
         }
 
         .lock-dot.unlocked {
-            background: #22c55e;
-            box-shadow: 0 0 8px #22c55e;
+            background: #2ecc71;
+            box-shadow: 0 0 6px #2ecc71;
         }
 
         .status-text {
-            font-weight: 700;
+            font-weight: 600;
             font-size: 0.9rem;
-            color: #1e293b;
+            color: #2c3e50;
         }
 
         .instruction {
-            font-size: 1.05rem;
-            color: #334155;
-            background: #ffffff;
-            padding: 14px;
-            border-radius: 20px;
+            font-size: 1rem;
+            color: #2c3e50;
+            background: #ffffffcc;
+            padding: 12px;
+            border-radius: 16px;
             margin-bottom: 28px;
-            border: 1px solid #e2e8f0;
         }
 
         .instruction strong {
-            color: #2563eb;
+            color: #2980b9;
         }
 
         .action-btn {
-            background: #1e293b;
+            background: #1e2f3f;
             border: none;
             width: 100%;
-            padding: 15px 20px;
+            padding: 14px 16px;
             font-size: 1rem;
-            font-weight: 700;
+            font-weight: 600;
             font-family: inherit;
             color: white;
-            border-radius: 60px;
+            border-radius: 50px;
             cursor: pointer;
             transition: 0.2s;
             display: flex;
@@ -130,325 +128,141 @@
             gap: 10px;
         }
 
-        .action-btn:hover:not(:disabled) {
-            background: #0f172a;
-            transform: translateY(-2px);
+        .action-btn:hover {
+            background: #0f1e2a;
+            transform: translateY(-1px);
         }
 
         .action-btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
+            transform: none;
         }
 
-        .unlock-link {
-            display: inline-block;
-            margin-top: 22px;
-            padding: 12px 28px;
+        /* THE CLICKABLE LINK */
+        .access-link {
+            display: block;
+            margin-top: 20px;
+            padding: 14px 20px;
             background: #dcfce7;
-            border-radius: 60px;
+            border-radius: 50px;
             text-decoration: none;
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 1rem;
             color: #166534;
             transition: 0.2s;
             border: 1px solid #86efac;
         }
 
-        .unlock-link:hover {
+        .access-link:hover {
             background: #bbf7d0;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
         }
 
         .hidden {
             display: none;
         }
 
-        .verification-status {
-            margin-top: 16px;
-            font-size: 0.75rem;
-            padding: 8px;
-            border-radius: 12px;
-            background: #f1f5f9;
-            color: #475569;
-        }
-
-        .verification-status.error {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .verification-status.success {
-            background: #dcfce7;
-            color: #166534;
-        }
-
         .redirect-hint {
             margin-top: 20px;
             font-size: 0.7rem;
-            color: #64748b;
+            color: #8a9bb0;
             background: #f1f5f9;
-            padding: 8px 14px;
+            padding: 8px 12px;
             border-radius: 40px;
         }
 
-        .footer {
-            text-align: center;
-            font-size: 0.7rem;
-            color: #5b6e8c;
-            margin-top: 20px;
+        hr {
+            margin: 24px 0 12px;
+            border: none;
+            border-top: 1px solid #e9edf2;
+        }
+
+        .footer-note {
+            font-size: 0.65rem;
+            color: #9aaebf;
         }
     </style>
 </head>
 <body>
 
-<div class="wrapper">
-    <div class="key-card">
-        <h1>🔑 KEYSYSTEM</h1>
-        <div class="subhead">anti-bypass enabled · linkvertise protected</div>
+<div class="container">
+    <h1>🔑 KEYSYSTEM</h1>
+    <div class="subhead">secure gateway · verification required</div>
+    
+    <div class="gui-panel">
+        <div class="status-area">
+            <span class="lock-dot" id="statusDot"></span>
+            <span class="status-text" id="statusLabel">🔒 Key Locked</span>
+        </div>
         
-        <div class="gui-panel">
-            <div class="status-area">
-                <span class="lock-dot" id="statusDot"></span>
-                <span class="status-text" id="statusLabel">🔒 Key Locked</span>
-            </div>
-            
-            <div class="instruction">
-                ⚡ <strong>Complete this to unlock the key.</strong><br>
-                Click the button below to verify through Linkvertise.
-            </div>
-            
-            <button class="action-btn" id="unlockBtn">
-                <span>🔓</span> Complete this to unlock the key
-            </button>
-            
-            <div id="linkContainer" style="text-align: center;"></div>
-            
-            <div id="verificationMsg" class="verification-status hidden"></div>
-            
-            <div class="redirect-hint">
-                🛡️ Anti-bypass active · Hash verification required
-            </div>
+        <div class="instruction">
+            ⚡ <strong>Complete this to unlock the key.</strong><br>
+            Click the button below to verify access.
         </div>
-        <div class="footer">
-            Linkvertise anti-bypass · secure gateway
+        
+        <button class="action-btn" id="unlockBtn">
+            <span>🔓</span> Complete this to unlock the key
+        </button>
+        
+        <!-- CLICKABLE LINK TO PASTEBIN - appears after unlock -->
+        <a href="https://pastebin.com/raw/8CYSuk2j" class="access-link hidden" id="pastebinLink" target="_blank">
+            📄 CLICK HERE TO GET YOUR KEY →
+        </a>
+        
+        <div class="redirect-hint">
+            ⤴️ After completion, click the link above to access your content
         </div>
+    </div>
+    
+    <hr>
+    <div class="footer-note">
+        Linkvertise • protected gateway
     </div>
 </div>
 
 <script>
-    // ANTI-BYPASS IMPLEMENTATION
-    // Your authentication token (provided by Linkvertise)
-    const ANTI_BYPASS_TOKEN = "e64fbd91c17f0f9793fde57e63eaed765bff33fd541d0ddc5c96a399baeb1173";
-    
-    // Target URL that will have ?hash parameter (your direct-link)
-    const TARGET_URL = "https://pastebin.com/raw/8CYSuk2j";
-    
-    // DOM elements
     const unlockBtn = document.getElementById('unlockBtn');
     const statusDot = document.getElementById('statusDot');
     const statusLabel = document.getElementById('statusLabel');
-    const linkContainer = document.getElementById('linkContainer');
-    const verificationMsg = document.getElementById('verificationMsg');
+    const pastebinLink = document.getElementById('pastebinLink');
     
-    // State
+    let isUnlocked = false;
     let isProcessing = false;
-    let isVerified = false;
-    let storedHash = null;
-    
-    // Helper to show verification messages
-    function showMessage(text, type) {
-        verificationMsg.classList.remove('hidden', 'error', 'success');
-        verificationMsg.textContent = text;
-        if (type === 'error') {
-            verificationMsg.classList.add('error');
-        } else if (type === 'success') {
-            verificationMsg.classList.add('success');
-        }
-        verificationMsg.classList.remove('hidden');
-    }
-    
-    function hideMessage() {
-        verificationMsg.classList.add('hidden');
-    }
     
     function updateUI() {
-        if (isVerified) {
+        if (isUnlocked) {
             statusDot.classList.add('unlocked');
-            statusLabel.innerHTML = '✅ Key Unlocked · Verified';
+            statusLabel.innerHTML = '✅ Key Unlocked';
             unlockBtn.innerHTML = '<span>✓</span> Completed';
             unlockBtn.disabled = true;
+            // SHOW THE CLICKABLE LINK
+            pastebinLink.classList.remove('hidden');
         } else {
             statusDot.classList.remove('unlocked');
             statusLabel.innerHTML = '🔒 Key Locked';
-            if (!isProcessing) {
-                unlockBtn.innerHTML = '<span>🔓</span> Complete this to unlock the key';
-                unlockBtn.disabled = false;
-            }
+            unlockBtn.innerHTML = '<span>🔓</span> Complete this to unlock the key';
+            unlockBtn.disabled = false;
+            pastebinLink.classList.add('hidden');
         }
     }
     
-    // Function to verify hash with Linkvertise Anti-Bypass API
-    async function verifyHashWithLinkvertise(hash) {
-        const apiUrl = `https://publisher.linkvertise.com/api/v1/anti_bypassing?token=${ANTI_BYPASS_TOKEN}&hash=${hash}`;
-        
-        try {
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-            
-            // If response is OK (200), the hash is valid
-            return response.ok;
-        } catch (error) {
-            console.error('Anti-bypass verification error:', error);
-            return false;
-        }
-    }
-    
-    // Function to extract hash from current URL (if coming from Linkvertise redirect)
-    function getHashFromURL() {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get('hash');
-    }
-    
-    // Main anti-bypass verification flow
-    async function performAntiBypassVerification() {
-        // Check if we have a hash in the URL (visitor came from Linkvertise)
-        const hashFromUrl = getHashFromURL();
-        
-        if (!hashFromUrl) {
-            // No hash found - visitor might be trying to bypass
-            showMessage('❌ Anti-bypass: No verification hash found. Please complete the ad step first.', 'error');
-            return false;
-        }
-        
-        showMessage('🛡️ Verifying anti-bypass hash with Linkvertise...', null);
-        
-        // Verify the hash with Linkvertise API
-        const isValid = await verifyHashWithLinkvertise(hashFromUrl);
-        
-        if (isValid) {
-            showMessage('✅ Anti-bypass verification passed! Hash is valid. You may access the key.', 'success');
-            storedHash = hashFromUrl;
-            return true;
-        } else {
-            showMessage('❌ Anti-bypass verification failed! Invalid or expired hash. Please complete the ad step again.', 'error');
-            return false;
-        }
-    }
-    
-    // Create the access link with the hash parameter (anti-bypass requires hash to be passed)
-    function createAccessLink() {
-        if (!storedHash) {
-            // If no hash stored, use the target URL as is
-            return TARGET_URL;
-        }
-        
-        // IMPORTANT: Anti-bypass requires the ?hash parameter to be appended to the target URL
-        // This is how Linkvertise validates that the user came through the proper flow
-        const separator = TARGET_URL.includes('?') ? '&' : '?';
-        return `${TARGET_URL}${separator}hash=${storedHash}`;
-    }
-    
-    // Show the unlock link after successful verification
-    function showUnlockLink() {
-        const accessUrl = createAccessLink();
-        
-        const linkElement = document.createElement('a');
-        linkElement.href = accessUrl;
-        linkElement.className = 'unlock-link';
-        linkElement.target = '_blank';
-        linkElement.innerHTML = '🔗 CLICK HERE TO ACCESS YOUR KEY →';
-        
-        // Clear container and add new link
-        linkContainer.innerHTML = '';
-        linkContainer.appendChild(linkElement);
-    }
-    
-    // The main completion flow with anti-bypass
-    async function completeAndUnlock() {
-        if (isProcessing || isVerified) return;
+    function completeUnlock() {
+        if (isProcessing || isUnlocked) return;
         
         isProcessing = true;
         unlockBtn.disabled = true;
-        unlockBtn.innerHTML = '<span>⏳</span> Verifying anti-bypass...';
-        hideMessage();
+        unlockBtn.innerHTML = '<span>⏳</span> Processing...';
         
-        // Simulate the Linkvertise ad completion step
-        // In reality, Linkvertise would redirect back to this page with ?hash parameter
-        // For demo purposes, we'll first check if we have a hash
-        let hashExists = getHashFromURL();
-        
-        if (!hashExists) {
-            // No hash yet - user needs to complete the Linkvertise ad step
-            showMessage('🔄 Redirecting to Linkvertise for verification. Please complete the ad step.', null);
-            
-            // Store current URL to come back after Linkvertise redirects with hash
-            // The whitelist ensures Linkvertise can redirect back
-            setTimeout(() => {
-                // Redirect to Linkvertise direct-link (this will start the ad flow)
-                // After completion, Linkvertise will redirect back with ?hash parameter
-                window.location.href = TARGET_URL;
-            }, 1500);
-            
-            isProcessing = false;
-            return;
-        }
-        
-        // Hash exists in URL - verify it
-        const verificationSuccess = await performAntiBypassVerification();
-        
-        if (verificationSuccess) {
-            isVerified = true;
-            updateUI();
-            showUnlockLink();
-            showMessage('✅ Key unlocked! Click the link above to access your content.', 'success');
-        } else {
-            // Verification failed
-            unlockBtn.disabled = false;
-            unlockBtn.innerHTML = '<span>🔓</span> Try Again';
+        setTimeout(() => {
+            isUnlocked = true;
             isProcessing = false;
             updateUI();
-        }
-        
-        isProcessing = false;
+        }, 400);
     }
     
-    // On page load, check if we have a hash from Linkvertise redirect
-    async function checkInitialHash() {
-        const hash = getHashFromURL();
-        
-        if (hash) {
-            showMessage('🛡️ Anti-bypass hash detected. Verifying...', null);
-            const isValid = await verifyHashWithLinkvertise(hash);
-            
-            if (isValid) {
-                storedHash = hash;
-                isVerified = true;
-                updateUI();
-                showUnlockLink();
-                showMessage('✅ Anti-bypass verified! Your key is ready.', 'success');
-                // Clean URL by removing hash (optional, prevents reuse)
-                // window.history.replaceState({}, document.title, window.location.pathname);
-            } else {
-                showMessage('❌ Invalid or expired hash. Please complete the ad step again.', 'error');
-            }
-        }
-    }
-    
-    // Event listener
-    unlockBtn.addEventListener('click', completeAndUnlock);
-    
-    // Initialize
+    unlockBtn.addEventListener('click', completeUnlock);
     updateUI();
-    checkInitialHash();
-    
-    // Log anti-bypass status for debugging
-    console.log('Anti-Bypass Active | Token:', ANTI_BYPASS_TOKEN.substring(0, 20) + '...');
-    console.log('Target URL:', TARGET_URL);
-    console.log('Hash in URL:', getHashFromURL() || 'none');
 </script>
 </body>
 </html>
