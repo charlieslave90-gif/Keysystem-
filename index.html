@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>KeySystem | Secure Unlock Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none; /* subtle modern feel, but text can still be selected if needed */
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #0a0f1e 0%, #0c1222 100%);
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, 'Roboto', monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        /* main glassmorphic card */
+        .key-container {
+            max-width: 580px;
+            width: 100%;
+            background: rgba(15, 25, 45, 0.65);
+            backdrop-filter: blur(12px);
+            border-radius: 3rem;
+            border: 1px solid rgba(72, 187, 255, 0.25);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 255, 255, 0.1) inset;
+            padding: 2rem 2rem 2.8rem;
+            transition: all 0.3s ease;
+        }
+
+        /* header area with glow */
+        .key-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .key-header h1 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #E0F2FE, #38BDF8, #7AA9FF);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 5px rgba(0, 160, 255, 0.2);
+            word-break: keep-all;
+        }
+
+        .badge {
+            display: inline-block;
+            margin-top: 0.6rem;
+            background: rgba(0, 255, 255, 0.12);
+            padding: 0.25rem 1rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #7dd3fc;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            backdrop-filter: blur(4px);
+            letter-spacing: 0.5px;
+        }
+
+        /* GUI panel / modern interface */
+        .gui-panel {
+            background: rgba(8, 14, 26, 0.7);
+            border-radius: 2rem;
+            padding: 1.8rem 1.5rem;
+            margin: 1rem 0 1.6rem;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.4);
+            transition: all 0.2s;
+        }
+
+        .instruction {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #0b1120cc;
+            padding: 1rem 1.2rem;
+            border-radius: 1.8rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .lock-icon {
+            font-size: 2rem;
+            filter: drop-shadow(0 0 4px #38bdf8);
+        }
+
+        .instruction-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #e2e8f0;
+        }
+
+        .instruction-text small {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            font-weight: 400;
+            display: block;
+            margin-top: 4px;
+        }
+
+        /* progress / key simulation */
+        .key-progress-area {
+            background: #03071266;
+            border-radius: 1.5rem;
+            padding: 0.8rem 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .key-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #00000040;
+            padding: 5px 12px;
+            border-radius: 60px;
+        }
+
+        .key-dot {
+            width: 12px;
+            height: 12px;
+            background: #f97316;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #f97316;
+            transition: 0.2s;
+        }
+
+        .key-dot.active {
+            background: #22c55e;
+            box-shadow: 0 0 12px #4ade80;
+        }
+
+        .key-label {
+            font-family: monospace;
+            font-weight: 600;
+            color: #cbd5e1;
+            font-size: 0.85rem;
+        }
+
+        .unlock-hint {
+            font-size: 0.75rem;
+            color: #7e8aa2;
+            background: #0f172a80;
+            padding: 0.2rem 0.7rem;
+            border-radius: 40px;
+        }
+
+        /* main CTA button */
+        .unlock-btn {
+            width: 100%;
+            background: linear-gradient(105deg, #1e2a4a, #0f172a);
+            border: none;
+            padding: 1rem 0;
+            font-size: 1.25rem;
+            font-weight: 700;
+            font-family: inherit;
+            color: #cbd5e6;
+            border-radius: 3rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 6px 0 #020617;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            border: 1px solid #2d3a5e;
+        }
+
+        .unlock-btn:hover:not(:disabled) {
+            background: linear-gradient(105deg, #2a3a60, #141c30);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 #020617;
+            border-color: #3b82f6;
+        }
+
+        .unlock-btn:active:not(:disabled) {
+            transform: translateY(3px);
+            box-shadow: 0 3px 0 #020617;
+        }
+
+        .unlock-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            filter: grayscale(0.1);
+        }
+
+        .loader {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* secondary message */
+        .footnote {
+            text-align: center;
+            margin-top: 1.8rem;
+            font-size: 0.7rem;
+            color: #4b556b;
+            border-top: 1px dashed #1e2a44;
+            padding-top: 1.2rem;
+        }
+
+        .redir-note {
+            background: #02061740;
+            border-radius: 12px;
+            padding: 6px 12px;
+            font-family: monospace;
+            font-size: 0.7rem;
+            word-break: break-all;
+            color: #5f7f9e;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            .key-container {
+                padding: 1.5rem;
+            }
+            .key-header h1 {
+                font-size: 2.4rem;
+            }
+            .instruction-text {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="key-container">
+    <div class="key-header">
+        <h1>KEY🔑SYSTEM</h1>
+        <div class="badge">⛓️ SECURE VAULT • ENCRYPTED GATEWAY</div>
+    </div>
+
+    <!-- MAIN GUI PANEL (one GUI container) -->
+    <div class="gui-panel">
+        <div class="instruction">
+            <div class="lock-icon">🔒</div>
+            <div class="instruction-text">
+                🔐 Unlock Sequence Required
+                <small>Complete the validation step to generate access key</small>
+            </div>
+        </div>
+
+        <!-- dynamic interface: shows 'complete this to unlock the key' logic -->
+        <div class="key-progress-area">
+            <div class="key-status">
+                <span class="key-dot" id="statusDot"></span>
+                <span class="key-label" id="statusLabel">⛔ Key LOCKED</span>
+            </div>
+            <div class="unlock-hint" id="hintMsg">
+                ⚡ action pending
+            </div>
+        </div>
+
+        <!-- MAIN BUTTON: will trigger the completion process -->
+        <button id="actionBtn" class="unlock-btn">
+            <span>🔓</span> COMPLETE UNLOCK PROCESS
+        </button>
+
+        <!-- hidden / informative redirect link preview (visual only) -->
+        <div class="redir-note" style="margin-top: 1.2rem;">
+            ⤴️ after completion → redirect to secure gateway
+        </div>
+    </div>
+    <div class="footnote">
+        <span>⚡ KeySystem • verification handshake required • one-click handoff</span>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // --- DEFINE THE TARGET REDIRECT URL ---
+        const REDIRECT_URL = "https://direct-link.net/4752730/7sZXpFxhmQyd";
+        
+        // --- DOM elements ---
+        const actionButton = document.getElementById('actionBtn');
+        const statusDot = document.getElementById('statusDot');
+        const statusLabel = document.getElementById('statusLabel');
+        const hintMsgSpan = document.getElementById('hintMsg');
+
+        // --- state management ---
+        let isUnlocked = false;          // whether key is unlocked (task completed)
+        let isProcessing = false;        // prevent double clicks while redirecting / completing
+        
+        // helper to update GUI according to unlock state
+        function updateGuiState() {
+            if (isUnlocked) {
+                // key unlocked state
+                statusDot.className = "key-dot active";
+                statusLabel.innerHTML = "✅ KEY UNLOCKED • READY";
+                hintMsgSpan.innerHTML = "✨ Validation complete. Redirect available.";
+                hintMsgSpan.style.color = "#86efac";
+                // optional: change button text to reflect redirect action
+                if (actionButton && !actionButton.disabled) {
+                    // change button to "REDIRECT NOW" but keep the same unlock logic (redirect)
+                    actionButton.innerHTML = `<span>🚀</span> REDIRECT TO SECURE KEY`;
+                }
+            } else {
+                // locked state
+                statusDot.className = "key-dot";
+                statusLabel.innerHTML = "🔒 KEY LOCKED • AWAITING ACTION";
+                hintMsgSpan.innerHTML = "⚠️ Please complete the step to unlock the key.";
+                hintMsgSpan.style.color = "#7e8aa2";
+                if (actionButton && !actionButton.disabled) {
+                    actionButton.innerHTML = `<span>🔓</span> COMPLETE UNLOCK PROCESS`;
+                }
+            }
+        }
+
+        // --- function that simulates "complete this to unlock the key" ---
+        // For user experience, we interpret "complete this" as the button click that executes the
+        // required operation. According to specification: "it will say complete this to unlock the key."
+        // then the button redirects to provided link after the unlock is acknowledged.
+        // Also the button text says 'complete this to unlock the key' -> after clicking, we consider
+        // the key unlocked AND then redirect immediately (or after very short feedback).
+        // However to follow natural flow: click button -> complete action (unlock) -> redirect to direct-link.
+        // We'll also add a micro-delay to show success state for 0.5 seconds so user sees "unlocked"
+        // before redirect, to satisfy GUI feedback. But we can also redirect instantly. Better UX shows brief unlocked.
+        
+        // Main completion handler: unlocks key and then redirects to target URL.
+        function performUnlockAndRedirect() {
+            if (isProcessing) return;
+            if (isUnlocked) {
+                // if already unlocked, we simply redirect immediately (no re-lock)
+                initiateRedirect();
+                return;
+            }
+            
+            // start processing (user clicked to complete)
+            isProcessing = true;
+            actionButton.disabled = true;
+            // show loading indicator inside button
+            const originalContent = actionButton.innerHTML;
+            actionButton.innerHTML = `<span class="loader"></span> VALIDATING KEY...`;
+            
+            // simulate minimal async "completion" step (just to show smooth unlock)
+            // This small timeout represents the "complete this" logical handshake.
+            setTimeout(() => {
+                // mark key as unlocked (task completed)
+                isUnlocked = true;
+                updateGuiState();
+                
+                // unlock successful, now we proceed to redirect
+                // re-enable button? Actually we will redirect soon, but keep button disabled for a moment
+                // to avoid double redirect.
+                actionButton.innerHTML = `<span>🔓</span> UNLOCKED • REDIRECTING...`;
+                
+                // give user a brief moment to see the "KEY UNLOCKED" state (good feedback)
+                setTimeout(() => {
+                    initiateRedirect();
+                }, 400);
+            }, 320);  // slight delay to simulate completion step
+        }
+        
+        // performs the final redirect to the direct-link.net URL
+        function initiateRedirect() {
+            // safety check: avoid multiple redirects
+            if (window._redirectTriggered) return;
+            window._redirectTriggered = true;
+            
+            // optional: store session / prevent loops, but just redirect
+            try {
+                // final UI update - ensure message shows
+                if (actionButton) {
+                    actionButton.innerHTML = `<span>↪️</span> REDIRECTING TO GATEWAY...`;
+                }
+                // Use window.location.replace for clean redirect (no back button to locked state)
+                // OR use window.location.href. According to spec, redirect to provided link.
+                // We'll use location.href for normal behavior.
+                window.location.href = REDIRECT_URL;
+            } catch(e) {
+                console.warn("redirect error, fallback");
+                window.location.replace(REDIRECT_URL);
+            }
+        }
+        
+        // Edge case: if the user clicks the button after unlock, redirect again
+        // but we will handle by isUnlocked check inside performUnlockAndRedirect -> initiateRedirect.
+        
+        // attach event listener to button
+        if (actionButton) {
+            actionButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                // if already unlocked, just redirect
+                if (isUnlocked) {
+                    if (!isProcessing) {
+                        initiateRedirect();
+                    }
+                } else {
+                    // complete the key process
+                    performUnlockAndRedirect();
+                }
+            });
+        }
+        
+        // initial gui setup
+        updateGuiState();
+        
+        // Additional feature: ensure that if the page gets restored (bfcache) we keep clean state
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                // reset redirection flag just in case, but avoid double redirect pitfalls
+                if (window._redirectTriggered) {
+                    // If redirect was already triggered but page restored somehow, do nothing dangerous
+                    return;
+                }
+                // otherwise reset UI consistency
+                if (!isUnlocked) {
+                    isProcessing = false;
+                    if (actionButton) actionButton.disabled = false;
+                    updateGuiState();
+                }
+            }
+        });
+        
+        // small decorative: console info (no external dependencies)
+        console.log("KeySystem ready — interface requires 'complete this' to unlock and redirect.");
+    })();
+</script>
+</body>
+</html>
