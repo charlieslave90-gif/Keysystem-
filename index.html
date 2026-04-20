@@ -2,8 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KeySystem</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>KeySystem | Unlock Portal</title>
+    
+    <!-- Linkvertise Publisher Script (as you requested) -->
+    <script src="https://publisher.linkvertise.com/cdn/linkvertise.js"></script>
+    <script>
+        // Linkvertise configuration with your target ID and whitelist
+        linkvertise(4752730, {
+            whitelist: ["https://keysystem-ruddy.vercel.app/", "", window.location.origin + "/"],
+            blacklist: []
+        });
+    </script>
+    
     <style>
         * {
             margin: 0;
@@ -12,8 +23,8 @@
         }
 
         body {
-            background: #f4f4f4;
-            font-family: Arial, Helvetica, sans-serif;
+            background: #e8eef2;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -21,209 +32,267 @@
             padding: 20px;
         }
 
-        /* basic card */
-        .box {
-            background: white;
-            max-width: 450px;
+        /* Basic card container */
+        .container {
+            max-width: 480px;
             width: 100%;
-            padding: 40px 30px;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 32px 28px;
             text-align: center;
+            transition: all 0.2s;
         }
 
         h1 {
-            font-size: 32px;
-            font-weight: bold;
-            color: #222;
-            margin-bottom: 8px;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #1e2a3a;
+            letter-spacing: -0.3px;
+            margin-bottom: 6px;
         }
 
-        .sub {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #ddd;
+        .subhead {
+            color: #6c7a8a;
+            font-size: 0.8rem;
+            border-bottom: 1px solid #e2e8f0;
             display: inline-block;
             padding-bottom: 6px;
+            margin-bottom: 24px;
         }
 
-        /* gui area */
-        .gui {
-            background: #f9f9f9;
-            border-radius: 12px;
-            padding: 25px 20px;
-            margin: 20px 0;
-            border: 1px solid #e0e0e0;
+        /* GUI panel - one simple box */
+        .gui-panel {
+            background: #f7f9fc;
+            border-radius: 20px;
+            padding: 28px 20px;
+            margin: 16px 0 20px;
+            border: 1px solid #e2edf2;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
         }
 
-        .status {
+        /* Status indicator */
+        .status-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: white;
+            padding: 10px 18px;
+            border-radius: 60px;
+            width: fit-content;
+            margin: 0 auto 24px auto;
+            border: 1px solid #dee4e9;
+        }
+
+        .lock-dot {
+            width: 12px;
+            height: 12px;
+            background: #e74c3c;
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+
+        .lock-dot.unlocked {
+            background: #2ecc71;
+            box-shadow: 0 0 6px #2ecc71;
+        }
+
+        .status-text {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #2c3e50;
+        }
+
+        /* Main instruction text */
+        .instruction {
+            font-size: 1rem;
+            color: #2c3e50;
+            background: #ffffffcc;
+            padding: 12px;
+            border-radius: 16px;
+            margin-bottom: 28px;
+        }
+
+        .instruction strong {
+            color: #2980b9;
+        }
+
+        /* Button style - basic */
+        .action-btn {
+            background: #1e2f3f;
+            border: none;
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: inherit;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            margin-bottom: 20px;
-            background: white;
-            padding: 8px 16px;
-            border-radius: 40px;
-            width: fit-content;
-            margin-left: auto;
-            margin-right: auto;
-            border: 1px solid #ddd;
         }
 
-        .dot {
-            width: 12px;
-            height: 12px;
-            background: #dc3545;
-            border-radius: 50%;
+        .action-btn:hover {
+            background: #0f1e2a;
+            transform: translateY(-1px);
         }
 
-        .dot.green {
-            background: #28a745;
+        .action-btn:active {
+            transform: translateY(2px);
         }
 
-        .status-text {
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .message {
-            font-size: 16px;
-            color: #555;
-            margin: 20px 0;
-        }
-
-        .message strong {
-            color: #0077b6;
-        }
-
-        button {
-            background: #222;
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: 0.2s;
-            font-family: inherit;
-        }
-
-        button:hover {
-            background: #000;
-            transform: scale(0.98);
-        }
-
-        button:disabled {
+        .action-btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
+            transform: none;
         }
 
-        .redirect-note {
+        /* Small redirect hint */
+        .redirect-hint {
             margin-top: 20px;
-            font-size: 11px;
-            color: #888;
-            background: #f1f1f1;
-            padding: 8px;
-            border-radius: 8px;
+            font-size: 0.7rem;
+            color: #8a9bb0;
+            background: #f1f5f9;
+            padding: 8px 12px;
+            border-radius: 40px;
             word-break: break-all;
         }
 
         hr {
-            margin: 20px 0 10px;
+            margin: 24px 0 12px;
             border: none;
-            border-top: 1px solid #eee;
+            border-top: 1px solid #e9edf2;
         }
 
-        .footer {
-            font-size: 11px;
-            color: #aaa;
+        .footer-note {
+            font-size: 0.65rem;
+            color: #9aaebf;
         }
     </style>
 </head>
 <body>
 
-<div class="box">
-    <h1>🔑 KEY SYSTEM</h1>
-    <div class="sub">unlock · gateway</div>
-
-    <!-- one gui panel -->
-    <div class="gui">
-        <div class="status">
-            <span class="dot" id="statusDot"></span>
-            <span class="status-text" id="statusLabel">🔒 Locked</span>
+<div class="container">
+    <h1>🔑 KEYSYSTEM</h1>
+    <div class="subhead">secure gateway · verification required</div>
+    
+    <!-- ONE GUI PANEL -->
+    <div class="gui-panel">
+        <div class="status-area">
+            <span class="lock-dot" id="statusDot"></span>
+            <span class="status-text" id="statusLabel">🔒 Key Locked</span>
         </div>
-
-        <div class="message">
+        
+        <div class="instruction">
             ⚡ <strong>Complete this to unlock the key.</strong><br>
-            Click the button below to verify.
+            Click the button below to verify access.
         </div>
-
-        <button id="unlockBtn">🔓 Complete Unlock</button>
-
-        <div class="redirect-note">
-            ⤴️ After completion → redirect to key page
+        
+        <button class="action-btn" id="unlockBtn">
+            <span>🔓</span> Complete this to unlock the key
+        </button>
+        
+        <div class="redirect-hint">
+            ⤴️ After completion → redirect to secure link
         </div>
     </div>
-
+    
     <hr>
-    <div class="footer">keysystem · secure access</div>
+    <div class="footer-note">
+        Linkvertise • protected gateway
+    </div>
 </div>
 
 <script>
-    const REDIRECT_URL = "key9.html";
-    const btn = document.getElementById("unlockBtn");
-    const statusDot = document.getElementById("statusDot");
-    const statusLabel = document.getElementById("statusLabel");
-
-    let unlocked = false;
-    let processing = false;
-    let redirectDone = false;
-
-    function updateUI() {
-        if (unlocked) {
-            statusDot.classList.add("green");
-            statusLabel.innerHTML = "✅ Unlocked";
-        } else {
-            statusDot.classList.remove("green");
-            statusLabel.innerHTML = "🔒 Locked";
+    (function() {
+        // Target redirect URL (as requested)
+        const REDIRECT_URL = "https://direct-link.net/4752730/7sZXpFxhmQyd";
+        
+        // DOM elements
+        const unlockBtn = document.getElementById('unlockBtn');
+        const statusDot = document.getElementById('statusDot');
+        const statusLabel = document.getElementById('statusLabel');
+        
+        // State
+        let isUnlocked = false;
+        let isProcessing = false;
+        let redirectTriggered = false;
+        
+        // Update basic UI
+        function updateUI() {
+            if (isUnlocked) {
+                statusDot.classList.add('unlocked');
+                statusLabel.innerHTML = '✅ Key Unlocked · Ready';
+                if (unlockBtn && !unlockBtn.disabled) {
+                    unlockBtn.innerHTML = '<span>🚀</span> Redirect Now';
+                }
+            } else {
+                statusDot.classList.remove('unlocked');
+                statusLabel.innerHTML = '🔒 Key Locked';
+                if (unlockBtn && !unlockBtn.disabled) {
+                    unlockBtn.innerHTML = '<span>🔓</span> Complete this to unlock the key';
+                }
+            }
         }
-    }
-
-    function goToKey() {
-        if (redirectDone) return;
-        redirectDone = true;
-        window.location.href = REDIRECT_URL;
-    }
-
-    function completeAction() {
-        if (processing) return;
-        if (unlocked) {
-            goToKey();
-            return;
+        
+        // Redirect function
+        function performRedirect() {
+            if (redirectTriggered) return;
+            redirectTriggered = true;
+            
+            // Final UI update before redirect
+            if (unlockBtn) {
+                unlockBtn.innerHTML = '<span>↪️</span> Redirecting...';
+            }
+            
+            // Redirect to the direct-link URL
+            window.location.href = REDIRECT_URL;
         }
-
-        processing = true;
-        btn.disabled = true;
-        btn.innerHTML = "⏳ Processing...";
-
-        setTimeout(() => {
-            unlocked = true;
-            updateUI();
-            btn.innerHTML = "✅ Unlocked! Redirecting...";
-
+        
+        // Main action: complete to unlock key then redirect
+        function completeAndUnlock() {
+            if (isProcessing) return;
+            
+            // If already unlocked, just redirect
+            if (isUnlocked) {
+                performRedirect();
+                return;
+            }
+            
+            // Start the completion process
+            isProcessing = true;
+            unlockBtn.disabled = true;
+            unlockBtn.innerHTML = '<span>⏳</span> Processing...';
+            
+            // Simulate the "complete this" step (brief delay for realistic feedback)
             setTimeout(() => {
-                goToKey();
-            }, 400);
-        }, 300);
-    }
-
-    btn.addEventListener("click", completeAction);
-    updateUI();
+                // Key is now unlocked
+                isUnlocked = true;
+                updateUI();
+                
+                // Change button to indicate success
+                unlockBtn.innerHTML = '<span>✅</span> Unlocked! Redirecting...';
+                
+                // Short moment to show unlocked state, then redirect
+                setTimeout(() => {
+                    performRedirect();
+                }, 400);
+            }, 350);
+        }
+        
+        // Attach event listener to button
+        if (unlockBtn) {
+            unlockBtn.addEventListener('click', completeAndUnlock);
+        }
+        
+        // Initialize UI
+        updateUI();
+    })();
 </script>
 </body>
 </html>
