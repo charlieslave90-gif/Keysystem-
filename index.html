@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>KeySystem | Unlock Portal</title>
     
-    <!-- Linkvertise Publisher Script (as you requested) -->
+    <!-- Linkvertise Publisher Script -->
     <script src="https://publisher.linkvertise.com/cdn/linkvertise.js"></script>
     <script>
-        // Linkvertise configuration with your target ID and whitelist
         linkvertise(4752730, {
             whitelist: ["https://keysystem-ruddy.vercel.app/", "", window.location.origin + "/"],
             blacklist: []
@@ -24,7 +23,7 @@
 
         body {
             background: #e8eef2;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -32,7 +31,6 @@
             padding: 20px;
         }
 
-        /* Basic card container */
         .container {
             max-width: 480px;
             width: 100%;
@@ -41,14 +39,12 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             padding: 32px 28px;
             text-align: center;
-            transition: all 0.2s;
         }
 
         h1 {
             font-size: 2.2rem;
             font-weight: 700;
             color: #1e2a3a;
-            letter-spacing: -0.3px;
             margin-bottom: 6px;
         }
 
@@ -61,17 +57,14 @@
             margin-bottom: 24px;
         }
 
-        /* GUI panel - one simple box */
         .gui-panel {
             background: #f7f9fc;
             border-radius: 20px;
             padding: 28px 20px;
             margin: 16px 0 20px;
             border: 1px solid #e2edf2;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
         }
 
-        /* Status indicator */
         .status-area {
             display: flex;
             align-items: center;
@@ -104,7 +97,6 @@
             color: #2c3e50;
         }
 
-        /* Main instruction text */
         .instruction {
             font-size: 1rem;
             color: #2c3e50;
@@ -118,7 +110,6 @@
             color: #2980b9;
         }
 
-        /* Button style - basic */
         .action-btn {
             background: #1e2f3f;
             border: none;
@@ -142,17 +133,35 @@
             transform: translateY(-1px);
         }
 
-        .action-btn:active {
-            transform: translateY(2px);
-        }
-
         .action-btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
         }
 
-        /* Small redirect hint */
+        /* Link style that appears after unlock */
+        .unlock-link {
+            display: block;
+            margin-top: 20px;
+            padding: 12px 16px;
+            background: #e8f5e9;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: 0.2s;
+            border: 1px solid #c8e6c9;
+        }
+
+        .unlock-link:hover {
+            background: #c8e6c9;
+            transform: translateY(-1px);
+        }
+
+        .hidden {
+            display: none;
+        }
+
         .redirect-hint {
             margin-top: 20px;
             font-size: 0.7rem;
@@ -160,7 +169,6 @@
             background: #f1f5f9;
             padding: 8px 12px;
             border-radius: 40px;
-            word-break: break-all;
         }
 
         hr {
@@ -181,7 +189,6 @@
     <h1>🔑 KEYSYSTEM</h1>
     <div class="subhead">secure gateway · verification required</div>
     
-    <!-- ONE GUI PANEL -->
     <div class="gui-panel">
         <div class="status-area">
             <span class="lock-dot" id="statusDot"></span>
@@ -197,8 +204,13 @@
             <span>🔓</span> Complete this to unlock the key
         </button>
         
+        <!-- This link appears AFTER they complete the unlock -->
+        <a href="https://direct-link.net/4752730/7sZXpFxhmQyd" class="unlock-link hidden" id="accessLink" target="_blank">
+            🔗 CLICK HERE TO ACCESS YOUR KEY →
+        </a>
+        
         <div class="redirect-hint">
-            ⤴️ After completion → redirect to secure link
+            ⤴️ After completion, a link will appear — click it to get your key
         </div>
     </div>
     
@@ -209,90 +221,47 @@
 </div>
 
 <script>
-    (function() {
-        // Target redirect URL (as requested)
-        const REDIRECT_URL = "https://direct-link.net/4752730/7sZXpFxhmQyd";
-        
-        // DOM elements
-        const unlockBtn = document.getElementById('unlockBtn');
-        const statusDot = document.getElementById('statusDot');
-        const statusLabel = document.getElementById('statusLabel');
-        
-        // State
-        let isUnlocked = false;
-        let isProcessing = false;
-        let redirectTriggered = false;
-        
-        // Update basic UI
-        function updateUI() {
-            if (isUnlocked) {
-                statusDot.classList.add('unlocked');
-                statusLabel.innerHTML = '✅ Key Unlocked · Ready';
-                if (unlockBtn && !unlockBtn.disabled) {
-                    unlockBtn.innerHTML = '<span>🚀</span> Redirect Now';
-                }
-            } else {
-                statusDot.classList.remove('unlocked');
-                statusLabel.innerHTML = '🔒 Key Locked';
-                if (unlockBtn && !unlockBtn.disabled) {
-                    unlockBtn.innerHTML = '<span>🔓</span> Complete this to unlock the key';
-                }
-            }
-        }
-        
-        // Redirect function
-        function performRedirect() {
-            if (redirectTriggered) return;
-            redirectTriggered = true;
-            
-            // Final UI update before redirect
-            if (unlockBtn) {
-                unlockBtn.innerHTML = '<span>↪️</span> Redirecting...';
-            }
-            
-            // Redirect to the direct-link URL
-            window.location.href = REDIRECT_URL;
-        }
-        
-        // Main action: complete to unlock key then redirect
-        function completeAndUnlock() {
-            if (isProcessing) return;
-            
-            // If already unlocked, just redirect
-            if (isUnlocked) {
-                performRedirect();
-                return;
-            }
-            
-            // Start the completion process
-            isProcessing = true;
+    const unlockBtn = document.getElementById('unlockBtn');
+    const statusDot = document.getElementById('statusDot');
+    const statusLabel = document.getElementById('statusLabel');
+    const accessLink = document.getElementById('accessLink');
+    
+    let isUnlocked = false;
+    let isProcessing = false;
+    
+    function updateUI() {
+        if (isUnlocked) {
+            statusDot.classList.add('unlocked');
+            statusLabel.innerHTML = '✅ Key Unlocked';
+            unlockBtn.innerHTML = '<span>✓</span> Completed';
             unlockBtn.disabled = true;
-            unlockBtn.innerHTML = '<span>⏳</span> Processing...';
-            
-            // Simulate the "complete this" step (brief delay for realistic feedback)
-            setTimeout(() => {
-                // Key is now unlocked
-                isUnlocked = true;
-                updateUI();
-                
-                // Change button to indicate success
-                unlockBtn.innerHTML = '<span>✅</span> Unlocked! Redirecting...';
-                
-                // Short moment to show unlocked state, then redirect
-                setTimeout(() => {
-                    performRedirect();
-                }, 400);
-            }, 350);
+            // Show the clickable link
+            accessLink.classList.remove('hidden');
+        } else {
+            statusDot.classList.remove('unlocked');
+            statusLabel.innerHTML = '🔒 Key Locked';
+            unlockBtn.innerHTML = '<span>🔓</span> Complete this to unlock the key';
+            unlockBtn.disabled = false;
+            accessLink.classList.add('hidden');
         }
+    }
+    
+    function completeUnlock() {
+        if (isProcessing || isUnlocked) return;
         
-        // Attach event listener to button
-        if (unlockBtn) {
-            unlockBtn.addEventListener('click', completeAndUnlock);
-        }
+        isProcessing = true;
+        unlockBtn.disabled = true;
+        unlockBtn.innerHTML = '<span>⏳</span> Processing...';
         
-        // Initialize UI
-        updateUI();
-    })();
+        setTimeout(() => {
+            isUnlocked = true;
+            isProcessing = false;
+            updateUI();
+        }, 400);
+    }
+    
+    unlockBtn.addEventListener('click', completeUnlock);
+    updateUI();
 </script>
 </body>
 </html>
