@@ -3,17 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>KeySystem | Unlock & Access</title>
-    
-    <!-- Linkvertise Publisher Script -->
-    <script src="https://publisher.linkvertise.com/cdn/linkvertise.js"></script>
-    <script>
-        linkvertise(4752730, {
-            whitelist: ["https://keysystem-ruddy.vercel.app/", "", window.location.origin + "/"],
-            blacklist: []
-        });
-    </script>
-    
+    <title>Key Generator | Simple Key System</title>
     <style>
         * {
             margin: 0;
@@ -22,8 +12,8 @@
         }
 
         body {
-            background: #e8eef2;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -34,91 +24,80 @@
         .container {
             max-width: 480px;
             width: 100%;
+        }
+
+        .card {
             background: white;
-            border-radius: 28px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            padding: 32px 28px;
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            padding: 40px 32px;
             text-align: center;
         }
 
         h1 {
             font-size: 2.2rem;
-            font-weight: 700;
-            color: #1e2a3a;
-            margin-bottom: 6px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e293b, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 8px;
         }
 
         .subhead {
-            color: #6c7a8a;
+            color: #64748b;
             font-size: 0.8rem;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 2px solid #e2e8f0;
             display: inline-block;
-            padding-bottom: 6px;
-            margin-bottom: 24px;
-        }
-
-        .gui-panel {
-            background: #f7f9fc;
-            border-radius: 20px;
-            padding: 28px 20px;
-            margin: 16px 0 20px;
-            border: 1px solid #e2edf2;
-        }
-
-        .status-area {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            background: white;
-            padding: 10px 18px;
-            border-radius: 60px;
-            width: fit-content;
-            margin: 0 auto 24px auto;
-            border: 1px solid #dee4e9;
-        }
-
-        .lock-dot {
-            width: 12px;
-            height: 12px;
-            background: #e74c3c;
-            border-radius: 50%;
-            transition: 0.2s;
-        }
-
-        .lock-dot.unlocked {
-            background: #2ecc71;
-            box-shadow: 0 0 6px #2ecc71;
-        }
-
-        .status-text {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: #2c3e50;
-        }
-
-        .instruction {
-            font-size: 1rem;
-            color: #2c3e50;
-            background: #ffffffcc;
-            padding: 12px;
-            border-radius: 16px;
+            padding-bottom: 8px;
             margin-bottom: 28px;
         }
 
-        .instruction strong {
-            color: #2980b9;
+        .api-badge {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 24px;
+            font-size: 0.7rem;
+            color: #475569;
+            word-break: break-all;
         }
 
-        .action-btn {
-            background: #1e2f3f;
-            border: none;
+        .key-display {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 24px;
+            margin: 20px 0;
+            border: 1px solid #e2e8f0;
+        }
+
+        .key-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+
+        .key-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #3b82f6;
+            background: white;
+            padding: 16px;
+            border-radius: 16px;
+            word-break: break-all;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn {
             width: 100%;
-            padding: 14px 16px;
+            padding: 14px 20px;
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: 700;
             font-family: inherit;
-            color: white;
+            border: none;
             border-radius: 50px;
             cursor: pointer;
             transition: 0.2s;
@@ -128,141 +107,295 @@
             gap: 10px;
         }
 
-        .action-btn:hover {
-            background: #0f1e2a;
+        .btn-primary {
+            background: #1e293b;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0f172a;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
             transform: translateY(-1px);
         }
 
-        .action-btn:disabled {
+        .btn-success {
+            background: #22c55e;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #16a34a;
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
         }
 
-        /* THE CLICKABLE LINK */
-        .access-link {
-            display: block;
-            margin-top: 20px;
-            padding: 14px 20px;
-            background: #dcfce7;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1rem;
-            color: #166534;
-            transition: 0.2s;
-            border: 1px solid #86efac;
+        .message {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
         }
 
-        .access-link:hover {
-            background: #bbf7d0;
-            transform: translateY(-2px);
+        .message.success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .message.info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 0.65rem;
+            color: #94a3b8;
+            text-align: center;
         }
 
         .hidden {
             display: none;
         }
 
-        .redirect-hint {
-            margin-top: 20px;
-            font-size: 0.7rem;
-            color: #8a9bb0;
-            background: #f1f5f9;
-            padding: 8px 12px;
-            border-radius: 40px;
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.6s linear infinite;
         }
 
-        hr {
-            margin: 24px 0 12px;
-            border: none;
-            border-top: 1px solid #e9edf2;
-        }
-
-        .footer-note {
-            font-size: 0.65rem;
-            color: #9aaebf;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <h1>🔑 KEYSYSTEM</h1>
-    <div class="subhead">secure gateway · verification required</div>
-    
-    <div class="gui-panel">
-        <div class="status-area">
-            <span class="lock-dot" id="statusDot"></span>
-            <span class="status-text" id="statusLabel">🔒 Key Locked</span>
-        </div>
-        
-        <div class="instruction">
-            ⚡ <strong>Complete this to unlock the key.</strong><br>
-            Click the button below to verify access.
-        </div>
-        
-        <button class="action-btn" id="unlockBtn">
-            <span>🔓</span> Complete this to unlock the key
-        </button>
-        
-        <!-- CLICKABLE LINK TO PASTEBIN - appears after unlock -->
-        <a href="https://pastebin.com/raw/8CYSuk2j" class="access-link hidden" id="pastebinLink" target="_blank">
-            📄 CLICK HERE TO GET YOUR KEY →
-        </a>
-        
-        <div class="redirect-hint">
-            ⤴️ After completion, click the link above to access your content
+    <div class="container">
+        <div class="card">
+            <h1>🔑 KEY GENERATOR</h1>
+            <div class="subhead">simple · fast · secure</div>
+            
+            <div class="api-badge">
+                📡 API: http://87.106.155.7:11489/
+            </div>
+            
+            <div class="key-display">
+                <div class="key-label">🔐 GENERATED KEY</div>
+                <div class="key-value" id="keyDisplay">—</div>
+                
+                <div class="button-group">
+                    <button class="btn btn-primary" id="generateBtn">
+                        <span>🎲</span> Generate Key
+                    </button>
+                    <button class="btn btn-secondary" id="copyBtn" disabled>
+                        📋 Copy
+                    </button>
+                </div>
+                
+                <div id="messageArea"></div>
+            </div>
+            
+            <button class="btn btn-success" id="useKeyBtn" style="margin-top: 8px;">
+                <span>🔓</span> Use This Key
+            </button>
+            
+            <div class="footer">
+                Click Generate to get a new key from the API
+            </div>
         </div>
     </div>
-    
-    <hr>
-    <div class="footer-note">
-        Linkvertise • protected gateway
-    </div>
-</div>
 
-<script>
-    const unlockBtn = document.getElementById('unlockBtn');
-    const statusDot = document.getElementById('statusDot');
-    const statusLabel = document.getElementById('statusLabel');
-    const pastebinLink = document.getElementById('pastebinLink');
-    
-    let isUnlocked = false;
-    let isProcessing = false;
-    
-    function updateUI() {
-        if (isUnlocked) {
-            statusDot.classList.add('unlocked');
-            statusLabel.innerHTML = '✅ Key Unlocked';
-            unlockBtn.innerHTML = '<span>✓</span> Completed';
-            unlockBtn.disabled = true;
-            // SHOW THE CLICKABLE LINK
-            pastebinLink.classList.remove('hidden');
-        } else {
-            statusDot.classList.remove('unlocked');
-            statusLabel.innerHTML = '🔒 Key Locked';
-            unlockBtn.innerHTML = '<span>🔓</span> Complete this to unlock the key';
-            unlockBtn.disabled = false;
-            pastebinLink.classList.add('hidden');
+    <script>
+        const API_BASE = "http://87.106.155.7:11489/";
+        
+        const generateBtn = document.getElementById('generateBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const useKeyBtn = document.getElementById('useKeyBtn');
+        const keyDisplay = document.getElementById('keyDisplay');
+        const messageArea = document.getElementById('messageArea');
+        
+        let currentKey = null;
+        
+        function showMessage(text, type) {
+            messageArea.innerHTML = `<div class="message ${type}">${text}</div>`;
+            setTimeout(() => {
+                if (messageArea.innerHTML.includes(text)) {
+                    messageArea.innerHTML = '';
+                }
+            }, 4000);
         }
-    }
-    
-    function completeUnlock() {
-        if (isProcessing || isUnlocked) return;
         
-        isProcessing = true;
-        unlockBtn.disabled = true;
-        unlockBtn.innerHTML = '<span>⏳</span> Processing...';
+        function clearMessage() {
+            messageArea.innerHTML = '';
+        }
         
+        async function generateKey() {
+            try {
+                generateBtn.disabled = true;
+                generateBtn.innerHTML = '<span class="loading"></span> Generating...';
+                copyBtn.disabled = true;
+                clearMessage();
+                
+                // Try different endpoint patterns
+                let response;
+                let data;
+                
+                // Try /generate first
+                try {
+                    response = await fetch(`${API_BASE}generate`, {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    
+                    if (response.ok) {
+                        data = await response.json();
+                    } else {
+                        throw new Error('Not found');
+                    }
+                } catch (e) {
+                    // Try /gen
+                    try {
+                        response = await fetch(`${API_BASE}gen`, {
+                            method: 'GET',
+                            headers: { 'Content-Type': 'application/json' }
+                        });
+                        if (response.ok) {
+                            data = await response.json();
+                        } else {
+                            throw new Error('Not found');
+                        }
+                    } catch (e2) {
+                        // Try root with POST
+                        response = await fetch(API_BASE, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' }
+                        });
+                        data = await response.json();
+                    }
+                }
+                
+                // Extract key from response (handle different formats)
+                let extractedKey = null;
+                if (data.key) {
+                    extractedKey = data.key;
+                } else if (data.token) {
+                    extractedKey = data.token;
+                } else if (data.code) {
+                    extractedKey = data.code;
+                } else if (data.result) {
+                    extractedKey = data.result;
+                } else if (typeof data === 'string') {
+                    extractedKey = data;
+                } else if (data.data && data.data.key) {
+                    extractedKey = data.data.key;
+                } else {
+                    // If response is just a string
+                    const text = await response.text();
+                    if (text && text.length < 100) {
+                        extractedKey = text;
+                    } else {
+                        throw new Error('Could not extract key from response');
+                    }
+                }
+                
+                currentKey = extractedKey;
+                keyDisplay.textContent = currentKey;
+                copyBtn.disabled = false;
+                showMessage('✅ Key generated successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Generate error:', error);
+                showMessage(`❌ Failed to generate key: ${error.message}`, 'error');
+                keyDisplay.textContent = '—';
+                currentKey = null;
+                copyBtn.disabled = true;
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = '<span>🎲</span> Generate Key';
+            }
+        }
+        
+        function copyKey() {
+            if (!currentKey) {
+                showMessage('⚠️ No key to copy. Generate one first.', 'error');
+                return;
+            }
+            
+            navigator.clipboard.writeText(currentKey).then(() => {
+                showMessage('📋 Key copied to clipboard!', 'success');
+            }).catch(() => {
+                showMessage('❌ Failed to copy key', 'error');
+            });
+        }
+        
+        function useKey() {
+            if (!currentKey) {
+                showMessage('⚠️ No key generated. Generate one first.', 'error');
+                return;
+            }
+            
+            // Copy to clipboard and show success
+            navigator.clipboard.writeText(currentKey);
+            showMessage(`🔑 Key "${currentKey}" is ready to use! Copied to clipboard.`, 'success');
+            
+            // Optional: redirect to a verification page
+            // window.location.href = `https://your-site.com/verify?key=${currentKey}`;
+        }
+        
+        // Event listeners
+        generateBtn.addEventListener('click', generateKey);
+        copyBtn.addEventListener('click', copyKey);
+        useKeyBtn.addEventListener('click', useKey);
+        
+        // Auto-generate on page load (optional)
         setTimeout(() => {
-            isUnlocked = true;
-            isProcessing = false;
-            updateUI();
-        }, 400);
-    }
-    
-    unlockBtn.addEventListener('click', completeUnlock);
-    updateUI();
-</script>
+            generateKey();
+        }, 300);
+        
+        // Check API status on load
+        async function checkAPI() {
+            try {
+                const response = await fetch(API_BASE, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (response.ok) {
+                    console.log('✅ API is reachable');
+                }
+            } catch (error) {
+                console.warn('⚠️ API might be offline:', error.message);
+                showMessage('⚠️ API server might be offline. Check your connection.', 'info');
+            }
+        }
+        checkAPI();
+    </script>
 </body>
 </html>
