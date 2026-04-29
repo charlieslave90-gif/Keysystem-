@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Key Generator | Simple Key System</title>
+    <title>Shared Temp Mail – testmail.app</title>
     <style>
         * {
             margin: 0;
@@ -12,390 +12,414 @@
         }
 
         body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: #f1f5f9;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
             padding: 20px;
         }
 
         .container {
-            max-width: 480px;
-            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
         }
 
         .card {
             background: white;
-            border-radius: 32px;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
-            padding: 40px 32px;
-            text-align: center;
+            border-radius: 24px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            padding: 24px;
+            margin-bottom: 24px;
         }
 
         h1 {
-            font-size: 2.2rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #1e293b, #3b82f6);
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #0f172a, #3b82f6);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
             margin-bottom: 8px;
         }
 
-        .subhead {
-            color: #64748b;
-            font-size: 0.8rem;
-            border-bottom: 2px solid #e2e8f0;
-            display: inline-block;
-            padding-bottom: 8px;
-            margin-bottom: 28px;
-        }
-
-        .api-badge {
-            background: #f1f5f9;
-            border-radius: 12px;
-            padding: 10px;
-            margin-bottom: 24px;
-            font-size: 0.7rem;
+        .sub {
             color: #475569;
-            word-break: break-all;
+            font-size: 0.85rem;
+            margin-bottom: 24px;
+            border-left: 3px solid #3b82f6;
+            padding-left: 12px;
         }
 
-        .key-display {
-            background: #f8fafc;
-            border-radius: 20px;
-            padding: 24px;
-            margin: 20px 0;
-            border: 1px solid #e2e8f0;
-        }
-
-        .key-label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #64748b;
-            margin-bottom: 12px;
-        }
-
-        .key-value {
-            font-family: 'Courier New', monospace;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #3b82f6;
-            background: white;
-            padding: 16px;
-            border-radius: 16px;
-            word-break: break-all;
-            border: 1px solid #e2e8f0;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 14px 20px;
-            font-size: 1rem;
-            font-weight: 700;
-            font-family: inherit;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: 0.2s;
+        .config-bar {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: flex-end;
+            margin-bottom: 24px;
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 20px;
         }
 
-        .btn-primary {
+        .field {
+            flex: 1;
+            min-width: 160px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #475569;
+            margin-bottom: 4px;
+        }
+
+        .field input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 14px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            background: white;
+        }
+
+        .field input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
+        }
+
+        button {
             background: #1e293b;
             color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .btn-primary:hover {
+        button:hover {
             background: #0f172a;
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
 
-        .btn-secondary {
+        .refresh-btn {
+            background: #3b82f6;
+        }
+
+        .refresh-btn:hover {
+            background: #2563eb;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .badge {
             background: #e2e8f0;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.75rem;
             color: #1e293b;
         }
 
-        .btn-secondary:hover {
-            background: #cbd5e1;
-            transform: translateY(-1px);
-        }
-
-        .btn-success {
-            background: #22c55e;
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: #16a34a;
-            transform: translateY(-1px);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .message {
-            margin-top: 16px;
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-        }
-
-        .message.success {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .message.error {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .message.info {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-
-        .button-group {
+        .email-list {
             display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .email-item {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            transition: 0.1s;
+            overflow: hidden;
+        }
+
+        .email-header {
+            padding: 16px 20px;
+            cursor: pointer;
+            background: #fefefe;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
             gap: 12px;
-            margin-top: 16px;
+            border-bottom: 1px solid transparent;
         }
 
-        .footer {
-            margin-top: 20px;
+        .email-header.open {
+            border-bottom-color: #e2e8f0;
+            background: #f9fafb;
+        }
+
+        .email-sender {
+            font-weight: 700;
+            color: #0f172a;
+            min-width: 180px;
+        }
+
+        .email-subject {
+            flex: 2;
+            color: #334155;
+            font-weight: 500;
+        }
+
+        .email-date {
+            font-size: 0.7rem;
+            color: #64748b;
+            font-family: monospace;
+        }
+
+        .spam-tag {
+            background: #fef9c3;
+            color: #854d0e;
             font-size: 0.65rem;
-            color: #94a3b8;
-            text-align: center;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 600;
         }
 
-        .hidden {
+        .email-body {
+            padding: 0 20px 20px 20px;
             display: none;
+            background: #fafcff;
+            border-top: 1px solid #e2e8f0;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: #1e293b;
+            word-break: break-word;
+        }
+
+        .email-body.open {
+            display: block;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 48px;
+            color: #64748b;
+            background: #f8fafc;
+            border-radius: 24px;
         }
 
         .loading {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 0.6s linear infinite;
+            text-align: center;
+            padding: 32px;
+            color: #3b82f6;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .spam-report {
+            background: #fef2e8;
+            margin-top: 12px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-family: monospace;
+            white-space: pre-wrap;
+            color: #9a3412;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            margin-top: 24px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <h1>🔑 KEY GENERATOR</h1>
-            <div class="subhead">simple · fast · secure</div>
-            
-            <div class="api-badge">
-                📡 API: http://87.106.155.7:11489/
+<div class="container">
+    <div class="card">
+        <h1>📬 Shared Temp Mail</h1>
+        <div class="sub">One inbox for everyone – refresh to see new messages. Spam scores included.</div>
+
+        <div class="config-bar">
+            <div class="field">
+                <label>🔑 API Key (fixed)</label>
+                <input type="text" id="apiKey" value="b9048de3-ddd1-4bda-8a63-64339a68ea31" readonly>
             </div>
-            
-            <div class="key-display">
-                <div class="key-label">🔐 GENERATED KEY</div>
-                <div class="key-value" id="keyDisplay">—</div>
-                
-                <div class="button-group">
-                    <button class="btn btn-primary" id="generateBtn">
-                        <span>🎲</span> Generate Key
-                    </button>
-                    <button class="btn btn-secondary" id="copyBtn" disabled>
-                        📋 Copy
-                    </button>
-                </div>
-                
-                <div id="messageArea"></div>
+            <div class="field">
+                <label>📁 Namespace *</label>
+                <input type="text" id="namespace" placeholder="e.g., yourNamespace" value="">
             </div>
-            
-            <button class="btn btn-success" id="useKeyBtn" style="margin-top: 8px;">
-                <span>🔓</span> Use This Key
-            </button>
-            
-            <div class="footer">
-                Click Generate to get a new key from the API
+            <div class="field">
+                <label>🏷️ Tag (optional)</label>
+                <input type="text" id="tag" placeholder="shared (or leave empty)" value="shared">
             </div>
+            <button id="refreshBtn" class="refresh-btn">🔄 Refresh Inbox</button>
+        </div>
+
+        <div class="stats">
+            <span class="badge" id="emailCount">— emails</span>
+            <span class="badge">📨 testmail.app</span>
+            <button id="clearCacheBtn" style="background:#64748b; padding:6px 16px;">🗑️ Clear local cache</button>
+        </div>
+
+        <div id="emailsContainer">
+            <div class="empty-state">👈 Set your Namespace (from testmail.app console) and click Refresh</div>
         </div>
     </div>
+    <footer>
+        API: testmail.app • Spam report enabled • <br>
+        All emails are stored on testmail servers – you control the namespace.
+    </footer>
+</div>
 
-    <script>
-        const API_BASE = "http://87.106.155.7:11489/";
-        
-        const generateBtn = document.getElementById('generateBtn');
-        const copyBtn = document.getElementById('copyBtn');
-        const useKeyBtn = document.getElementById('useKeyBtn');
-        const keyDisplay = document.getElementById('keyDisplay');
-        const messageArea = document.getElementById('messageArea');
-        
-        let currentKey = null;
-        
-        function showMessage(text, type) {
-            messageArea.innerHTML = `<div class="message ${type}">${text}</div>`;
-            setTimeout(() => {
-                if (messageArea.innerHTML.includes(text)) {
-                    messageArea.innerHTML = '';
-                }
-            }, 4000);
+<script>
+    // DOM elements
+    const apiKeyInput = document.getElementById('apiKey');
+    const namespaceInput = document.getElementById('namespace');
+    const tagInput = document.getElementById('tag');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const clearCacheBtn = document.getElementById('clearCacheBtn');
+    const emailsContainer = document.getElementById('emailsContainer');
+    const emailCountSpan = document.getElementById('emailCount');
+
+    // Helper: build API URL
+    function buildApiUrl(namespace, tag, limit = 30) {
+        let url = `https://api.testmail.app/api/json?apikey=${encodeURIComponent(apiKeyInput.value)}&namespace=${encodeURIComponent(namespace)}&spam_report=true&limit=${limit}&pretty=false`;
+        if (tag && tag.trim() !== '') {
+            url += `&tag=${encodeURIComponent(tag.trim())}`;
         }
-        
-        function clearMessage() {
-            messageArea.innerHTML = '';
+        return url;
+    }
+
+    // Render emails from API response
+    function renderEmails(emails, totalCount) {
+        if (!emails || emails.length === 0) {
+            emailsContainer.innerHTML = `<div class="empty-state">📭 No emails found in this namespace/tag. Send a test email to <strong>${namespaceInput.value.trim()}.${tagInput.value.trim() || 'anything'}@inbox.testmail.app</strong></div>`;
+            emailCountSpan.innerText = `0 emails`;
+            return;
         }
-        
-        async function generateKey() {
-            try {
-                generateBtn.disabled = true;
-                generateBtn.innerHTML = '<span class="loading"></span> Generating...';
-                copyBtn.disabled = true;
-                clearMessage();
-                
-                // Try different endpoint patterns
-                let response;
-                let data;
-                
-                // Try /generate first
-                try {
-                    response = await fetch(`${API_BASE}generate`, {
-                        method: 'GET',
-                        headers: { 'Content-Type': 'application/json' }
-                    });
-                    
-                    if (response.ok) {
-                        data = await response.json();
-                    } else {
-                        throw new Error('Not found');
-                    }
-                } catch (e) {
-                    // Try /gen
-                    try {
-                        response = await fetch(`${API_BASE}gen`, {
-                            method: 'GET',
-                            headers: { 'Content-Type': 'application/json' }
-                        });
-                        if (response.ok) {
-                            data = await response.json();
-                        } else {
-                            throw new Error('Not found');
-                        }
-                    } catch (e2) {
-                        // Try root with POST
-                        response = await fetch(API_BASE, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' }
-                        });
-                        data = await response.json();
-                    }
-                }
-                
-                // Extract key from response (handle different formats)
-                let extractedKey = null;
-                if (data.key) {
-                    extractedKey = data.key;
-                } else if (data.token) {
-                    extractedKey = data.token;
-                } else if (data.code) {
-                    extractedKey = data.code;
-                } else if (data.result) {
-                    extractedKey = data.result;
-                } else if (typeof data === 'string') {
-                    extractedKey = data;
-                } else if (data.data && data.data.key) {
-                    extractedKey = data.data.key;
-                } else {
-                    // If response is just a string
-                    const text = await response.text();
-                    if (text && text.length < 100) {
-                        extractedKey = text;
-                    } else {
-                        throw new Error('Could not extract key from response');
-                    }
-                }
-                
-                currentKey = extractedKey;
-                keyDisplay.textContent = currentKey;
-                copyBtn.disabled = false;
-                showMessage('✅ Key generated successfully!', 'success');
-                
-            } catch (error) {
-                console.error('Generate error:', error);
-                showMessage(`❌ Failed to generate key: ${error.message}`, 'error');
-                keyDisplay.textContent = '—';
-                currentKey = null;
-                copyBtn.disabled = true;
-            } finally {
-                generateBtn.disabled = false;
-                generateBtn.innerHTML = '<span>🎲</span> Generate Key';
+
+        emailCountSpan.innerText = `${totalCount || emails.length} emails`;
+
+        let html = `<div class="email-list">`;
+        for (let i = 0; i < emails.length; i++) {
+            const mail = emails[i];
+            const from = mail.from || '(no sender)';
+            const subject = mail.subject || '(no subject)';
+            const timestamp = mail.timestamp ? new Date(mail.timestamp).toLocaleString() : 'unknown date';
+            const spamScore = mail.spam_score !== undefined ? mail.spam_score.toFixed(2) : null;
+            const spamReport = mail.spam_report || null;
+            const textBody = mail.text || mail.html || '(no body content)';
+            const isSpam = spamScore !== null && spamScore > 5.0;
+
+            html += `
+                <div class="email-item" data-idx="${i}">
+                    <div class="email-header" onclick="toggleBody(${i})">
+                        <div class="email-sender">📧 ${escapeHtml(from)}</div>
+                        <div class="email-subject">📌 ${escapeHtml(subject)}</div>
+                        <div class="email-date">${escapeHtml(timestamp)}</div>
+                        ${spamScore ? `<div class="spam-tag">⚠️ spam ${spamScore}</div>` : '<div class="spam-tag" style="background:#dcfce7;color:#166534;">✅ clean</div>'}
+                    </div>
+                    <div class="email-body" id="body-${i}">
+                        <div style="margin-bottom:8px;"><strong>📄 Content:</strong></div>
+                        <div style="background:#ffffff; padding:12px; border-radius:12px; border:1px solid #e2e8f0; overflow-x:auto;">
+                            ${escapeHtml(textBody.substring(0, 3000))}${textBody.length > 3000 ? '… (truncated)' : ''}
+                        </div>
+            `;
+            if (spamReport) {
+                html += `<div class="spam-report"><strong>📢 Spam report</strong><br>${escapeHtml(spamReport.substring(0, 1500))}${spamReport.length > 1500 ? '…' : ''}</div>`;
             }
+            html += `</div></div>`;
         }
-        
-        function copyKey() {
-            if (!currentKey) {
-                showMessage('⚠️ No key to copy. Generate one first.', 'error');
-                return;
+        html += `</div>`;
+        emailsContainer.innerHTML = html;
+    }
+
+    // Helper: escape HTML
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+
+    // Fetch emails from API
+    async function fetchEmails() {
+        const namespace = namespaceInput.value.trim();
+        if (!namespace) {
+            emailsContainer.innerHTML = `<div class="empty-state">⚠️ Please enter your testmail.app Namespace (you can find it in your console).</div>`;
+            emailCountSpan.innerText = '?';
+            return;
+        }
+
+        const tag = tagInput.value.trim();
+        const url = buildApiUrl(namespace, tag, 50);
+        emailsContainer.innerHTML = `<div class="loading">⏳ Fetching emails from testmail.app ...</div>`;
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
-            
-            navigator.clipboard.writeText(currentKey).then(() => {
-                showMessage('📋 Key copied to clipboard!', 'success');
-            }).catch(() => {
-                showMessage('❌ Failed to copy key', 'error');
-            });
-        }
-        
-        function useKey() {
-            if (!currentKey) {
-                showMessage('⚠️ No key generated. Generate one first.', 'error');
-                return;
+            const data = await response.json();
+            if (data.result === 'success') {
+                const emails = data.emails || [];
+                renderEmails(emails, data.count);
+            } else {
+                throw new Error(data.message || 'Unknown API error');
             }
-            
-            // Copy to clipboard and show success
-            navigator.clipboard.writeText(currentKey);
-            showMessage(`🔑 Key "${currentKey}" is ready to use! Copied to clipboard.`, 'success');
-            
-            // Optional: redirect to a verification page
-            // window.location.href = `https://your-site.com/verify?key=${currentKey}`;
+        } catch (err) {
+            console.error(err);
+            emailsContainer.innerHTML = `<div class="empty-state">❌ Error: ${err.message}<br>Check namespace, API key and network.</div>`;
+            emailCountSpan.innerText = 'error';
         }
-        
-        // Event listeners
-        generateBtn.addEventListener('click', generateKey);
-        copyBtn.addEventListener('click', copyKey);
-        useKeyBtn.addEventListener('click', useKey);
-        
-        // Auto-generate on page load (optional)
-        setTimeout(() => {
-            generateKey();
-        }, 300);
-        
-        // Check API status on load
-        async function checkAPI() {
-            try {
-                const response = await fetch(API_BASE, {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                if (response.ok) {
-                    console.log('✅ API is reachable');
-                }
-            } catch (error) {
-                console.warn('⚠️ API might be offline:', error.message);
-                showMessage('⚠️ API server might be offline. Check your connection.', 'info');
-            }
+    }
+
+    // Toggle email body visibility (global function)
+    window.toggleBody = function(idx) {
+        const bodyDiv = document.getElementById(`body-${idx}`);
+        if (bodyDiv) {
+            bodyDiv.classList.toggle('open');
+            const header = bodyDiv.previousElementSibling;
+            if (header) header.classList.toggle('open');
         }
-        checkAPI();
-    </script>
+    };
+
+    // Clear any locally stored namespace (just UI reset)
+    function clearLocal() {
+        namespaceInput.value = '';
+        tagInput.value = 'shared';
+        emailsContainer.innerHTML = `<div class="empty-state">🗑️ Cleared. Enter namespace and refresh.</div>`;
+        emailCountSpan.innerText = '—';
+    }
+
+    // Event listeners
+    refreshBtn.addEventListener('click', fetchEmails);
+    clearCacheBtn.addEventListener('click', clearLocal);
+
+    // Load from localStorage if present
+    const savedNamespace = localStorage.getItem('testmail_namespace');
+    const savedTag = localStorage.getItem('testmail_tag');
+    if (savedNamespace) namespaceInput.value = savedNamespace;
+    if (savedTag) tagInput.value = savedTag;
+
+    namespaceInput.addEventListener('change', () => localStorage.setItem('testmail_namespace', namespaceInput.value));
+    tagInput.addEventListener('change', () => localStorage.setItem('testmail_tag', tagInput.value));
+
+    // Optional: auto fetch if namespace already filled
+    if (savedNamespace) {
+        fetchEmails();
+    }
+</script>
 </body>
 </html>
