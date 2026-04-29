@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Shared Temp Mail – testmail.app</title>
+    <title>TempMail – Shared Inbox with Persistent Email</title>
     <style>
         * {
             margin: 0;
@@ -48,6 +48,39 @@
             padding-left: 12px;
         }
 
+        .email-address-card {
+            background: #f0f9ff;
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .email-address {
+            font-family: monospace;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0f172a;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 40px;
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            background: #3b82f6;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
         .config-bar {
             display: flex;
             flex-wrap: wrap;
@@ -83,17 +116,11 @@
             background: white;
         }
 
-        .field input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
-        }
-
         button {
             background: #1e293b;
             color: white;
             border: none;
-            padding: 10px 24px;
+            padding: 10px 20px;
             border-radius: 40px;
             font-weight: 600;
             cursor: pointer;
@@ -108,12 +135,16 @@
             transform: translateY(-1px);
         }
 
-        .refresh-btn {
-            background: #3b82f6;
+        .generate-btn {
+            background: #8b5cf6;
         }
 
-        .refresh-btn:hover {
-            background: #2563eb;
+        .generate-btn:hover {
+            background: #7c3aed;
+        }
+
+        .refresh-btn {
+            background: #3b82f6;
         }
 
         .stats {
@@ -143,7 +174,6 @@
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 20px;
-            transition: 0.1s;
             overflow: hidden;
         }
 
@@ -237,13 +267,26 @@
             color: #94a3b8;
             margin-top: 24px;
         }
+
+        @media (max-width: 640px) {
+            .email-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="card">
-        <h1>📬 Shared Temp Mail</h1>
-        <div class="sub">One inbox for everyone – refresh to see new messages. Spam scores included.</div>
+        <h1>📬 TempMail Hub</h1>
+        <div class="sub">Generate a temporary email – persists in browser. Refresh to check new mail.</div>
+
+        <!-- Display current email address -->
+        <div class="email-address-card" id="emailAddressCard">
+            <div class="email-address" id="emailAddressDisplay">—</div>
+            <button class="copy-btn" id="copyEmailBtn">📋 Copy Email</button>
+        </div>
 
         <div class="config-bar">
             <div class="field">
@@ -255,25 +298,26 @@
                 <input type="text" id="namespace" placeholder="e.g., yourNamespace" value="">
             </div>
             <div class="field">
-                <label>🏷️ Tag (optional)</label>
-                <input type="text" id="tag" placeholder="shared (or leave empty)" value="shared">
+                <label>🏷️ Tag (email local part)</label>
+                <input type="text" id="tag" placeholder="auto-generated">
             </div>
-            <button id="refreshBtn" class="refresh-btn">🔄 Refresh Inbox</button>
+            <button id="generateEmailBtn" class="generate-btn">🔄 Generate New Email</button>
+            <button id="refreshBtn" class="refresh-btn">📥 Refresh Inbox</button>
         </div>
 
         <div class="stats">
             <span class="badge" id="emailCount">— emails</span>
-            <span class="badge">📨 testmail.app</span>
-            <button id="clearCacheBtn" style="background:#64748b; padding:6px 16px;">🗑️ Clear local cache</button>
+            <span class="badge">📨 testmail.app (spam detection on)</span>
+            <button id="clearStorageBtn" style="background:#64748b; padding:4px 12px;">🗑️ Reset All</button>
         </div>
 
         <div id="emailsContainer">
-            <div class="empty-state">👈 Set your Namespace (from testmail.app console) and click Refresh</div>
+            <div class="empty-state">👈 Set your Namespace and generate an email, then click Refresh.</div>
         </div>
     </div>
     <footer>
-        API: testmail.app • Spam report enabled • <br>
-        All emails are stored on testmail servers – you control the namespace.
+        Emails are stored on testmail.app servers. Spam scores are shown.<br>
+        Your generated email address is saved locally – reopen the page and it will still be there.
     </footer>
 </div>
 
@@ -282,13 +326,75 @@
     const apiKeyInput = document.getElementById('apiKey');
     const namespaceInput = document.getElementById('namespace');
     const tagInput = document.getElementById('tag');
+    const generateBtn = document.getElementById('generateEmailBtn');
     const refreshBtn = document.getElementById('refreshBtn');
-    const clearCacheBtn = document.getElementById('clearCacheBtn');
+    const clearStorageBtn = document.getElementById('clearStorageBtn');
     const emailsContainer = document.getElementById('emailsContainer');
     const emailCountSpan = document.getElementById('emailCount');
+    const emailAddressDisplay = document.getElementById('emailAddressDisplay');
+    const copyEmailBtn = document.getElementById('copyEmailBtn');
 
-    // Helper: build API URL
-    function buildApiUrl(namespace, tag, limit = 30) {
+    // Helper: generate random tag (local part)
+    function generateRandomTag() {
+        const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        for (let i = 0; i < 10; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return result;
+    }
+
+    // Update displayed email address based on namespace and tag
+    function updateDisplayEmail() {
+        const namespace = namespaceInput.value.trim();
+        const tag = tagInput.value.trim();
+        if (namespace && tag) {
+            emailAddressDisplay.innerText = `${namespace}.${tag}@inbox.testmail.app`;
+        } else if (namespace) {
+            emailAddressDisplay.innerText = `${namespace}.<any-tag>@inbox.testmail.app`;
+        } else {
+            emailAddressDisplay.innerText = '— (set namespace first)';
+        }
+    }
+
+    // Save current namespace & tag to localStorage
+    function persistToLocal() {
+        const namespace = namespaceInput.value.trim();
+        const tag = tagInput.value.trim();
+        if (namespace) localStorage.setItem('tempmail_namespace', namespace);
+        if (tag) localStorage.setItem('tempmail_tag', tag);
+        updateDisplayEmail();
+    }
+
+    // Load from localStorage on startup
+    function loadFromLocal() {
+        const savedNamespace = localStorage.getItem('tempmail_namespace');
+        const savedTag = localStorage.getItem('tempmail_tag');
+        if (savedNamespace) namespaceInput.value = savedNamespace;
+        if (savedTag) tagInput.value = savedTag;
+        updateDisplayEmail();
+        if (savedNamespace) {
+            // optionally auto-fetch but user can click refresh
+        }
+    }
+
+    // Generate new email: create random tag, save, refresh inbox automatically
+    function generateNewEmail() {
+        const namespace = namespaceInput.value.trim();
+        if (!namespace) {
+            alert('Please enter your testmail.app Namespace first.');
+            return;
+        }
+        const newTag = generateRandomTag();
+        tagInput.value = newTag;
+        persistToLocal();
+        updateDisplayEmail();
+        // After generating new email, refresh inbox to show only new address's emails
+        fetchEmails();
+    }
+
+    // Build API URL (with spam report)
+    function buildApiUrl(namespace, tag, limit = 50) {
         let url = `https://api.testmail.app/api/json?apikey=${encodeURIComponent(apiKeyInput.value)}&namespace=${encodeURIComponent(namespace)}&spam_report=true&limit=${limit}&pretty=false`;
         if (tag && tag.trim() !== '') {
             url += `&tag=${encodeURIComponent(tag.trim())}`;
@@ -296,27 +402,24 @@
         return url;
     }
 
-    // Render emails from API response
+    // Render emails
     function renderEmails(emails, totalCount) {
         if (!emails || emails.length === 0) {
-            emailsContainer.innerHTML = `<div class="empty-state">📭 No emails found in this namespace/tag. Send a test email to <strong>${namespaceInput.value.trim()}.${tagInput.value.trim() || 'anything'}@inbox.testmail.app</strong></div>`;
+            emailsContainer.innerHTML = `<div class="empty-state">📭 No emails found. Send a test message to <strong>${emailAddressDisplay.innerText}</strong></div>`;
             emailCountSpan.innerText = `0 emails`;
             return;
         }
-
         emailCountSpan.innerText = `${totalCount || emails.length} emails`;
-
         let html = `<div class="email-list">`;
         for (let i = 0; i < emails.length; i++) {
             const mail = emails[i];
             const from = mail.from || '(no sender)';
             const subject = mail.subject || '(no subject)';
-            const timestamp = mail.timestamp ? new Date(mail.timestamp).toLocaleString() : 'unknown date';
+            const timestamp = mail.timestamp ? new Date(mail.timestamp).toLocaleString() : 'unknown';
             const spamScore = mail.spam_score !== undefined ? mail.spam_score.toFixed(2) : null;
             const spamReport = mail.spam_report || null;
-            const textBody = mail.text || mail.html || '(no body content)';
+            const textBody = mail.text || mail.html || '(no body)';
             const isSpam = spamScore !== null && spamScore > 5.0;
-
             html += `
                 <div class="email-item" data-idx="${i}">
                     <div class="email-header" onclick="toggleBody(${i})">
@@ -328,7 +431,7 @@
                     <div class="email-body" id="body-${i}">
                         <div style="margin-bottom:8px;"><strong>📄 Content:</strong></div>
                         <div style="background:#ffffff; padding:12px; border-radius:12px; border:1px solid #e2e8f0; overflow-x:auto;">
-                            ${escapeHtml(textBody.substring(0, 3000))}${textBody.length > 3000 ? '… (truncated)' : ''}
+                            ${escapeHtml(textBody.substring(0, 3000))}${textBody.length > 3000 ? '…' : ''}
                         </div>
             `;
             if (spamReport) {
@@ -340,7 +443,6 @@
         emailsContainer.innerHTML = html;
     }
 
-    // Helper: escape HTML
     function escapeHtml(str) {
         if (!str) return '';
         return str.replace(/[&<>]/g, function(m) {
@@ -348,76 +450,85 @@
             if (m === '<') return '&lt;';
             if (m === '>') return '&gt;';
             return m;
-        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
-            return c;
         });
     }
 
-    // Fetch emails from API
     async function fetchEmails() {
         const namespace = namespaceInput.value.trim();
         if (!namespace) {
-            emailsContainer.innerHTML = `<div class="empty-state">⚠️ Please enter your testmail.app Namespace (you can find it in your console).</div>`;
+            emailsContainer.innerHTML = `<div class="empty-state">⚠️ Please enter your testmail.app Namespace (find it in your console).</div>`;
             emailCountSpan.innerText = '?';
             return;
         }
-
         const tag = tagInput.value.trim();
         const url = buildApiUrl(namespace, tag, 50);
         emailsContainer.innerHTML = `<div class="loading">⏳ Fetching emails from testmail.app ...</div>`;
-
         try {
             const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-            }
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const data = await response.json();
             if (data.result === 'success') {
-                const emails = data.emails || [];
-                renderEmails(emails, data.count);
+                renderEmails(data.emails || [], data.count);
             } else {
-                throw new Error(data.message || 'Unknown API error');
+                throw new Error(data.message || 'API error');
             }
         } catch (err) {
             console.error(err);
-            emailsContainer.innerHTML = `<div class="empty-state">❌ Error: ${err.message}<br>Check namespace, API key and network.</div>`;
+            emailsContainer.innerHTML = `<div class="empty-state">❌ Error: ${err.message}<br>Check namespace, API key, or network.</div>`;
             emailCountSpan.innerText = 'error';
         }
     }
 
-    // Toggle email body visibility (global function)
+    // Reset all local storage and clear inputs
+    function resetAll() {
+        localStorage.removeItem('tempmail_namespace');
+        localStorage.removeItem('tempmail_tag');
+        namespaceInput.value = '';
+        tagInput.value = '';
+        updateDisplayEmail();
+        emailsContainer.innerHTML = `<div class="empty-state">🔄 Reset complete. Enter namespace and generate a new email.</div>`;
+        emailCountSpan.innerText = '—';
+    }
+
+    // Copy email to clipboard
+    function copyEmail() {
+        const email = emailAddressDisplay.innerText;
+        if (email && email !== '—') {
+            navigator.clipboard.writeText(email);
+            alert('📋 Email copied to clipboard: ' + email);
+        } else {
+            alert('⚠️ No email address to copy. Set namespace and generate.');
+        }
+    }
+
+    // Toggle email body (global)
     window.toggleBody = function(idx) {
-        const bodyDiv = document.getElementById(`body-${idx}`);
-        if (bodyDiv) {
-            bodyDiv.classList.toggle('open');
-            const header = bodyDiv.previousElementSibling;
+        const body = document.getElementById(`body-${idx}`);
+        if (body) {
+            body.classList.toggle('open');
+            const header = body.previousElementSibling;
             if (header) header.classList.toggle('open');
         }
     };
 
-    // Clear any locally stored namespace (just UI reset)
-    function clearLocal() {
-        namespaceInput.value = '';
-        tagInput.value = 'shared';
-        emailsContainer.innerHTML = `<div class="empty-state">🗑️ Cleared. Enter namespace and refresh.</div>`;
-        emailCountSpan.innerText = '—';
-    }
-
     // Event listeners
+    generateBtn.addEventListener('click', generateNewEmail);
     refreshBtn.addEventListener('click', fetchEmails);
-    clearCacheBtn.addEventListener('click', clearLocal);
+    clearStorageBtn.addEventListener('click', resetAll);
+    copyEmailBtn.addEventListener('click', copyEmail);
+    namespaceInput.addEventListener('input', () => {
+        persistToLocal();
+        updateDisplayEmail();
+    });
+    tagInput.addEventListener('input', () => {
+        persistToLocal();
+        updateDisplayEmail();
+    });
 
-    // Load from localStorage if present
-    const savedNamespace = localStorage.getItem('testmail_namespace');
-    const savedTag = localStorage.getItem('testmail_tag');
-    if (savedNamespace) namespaceInput.value = savedNamespace;
-    if (savedTag) tagInput.value = savedTag;
-
-    namespaceInput.addEventListener('change', () => localStorage.setItem('testmail_namespace', namespaceInput.value));
-    tagInput.addEventListener('change', () => localStorage.setItem('testmail_tag', tagInput.value));
-
-    // Optional: auto fetch if namespace already filled
-    if (savedNamespace) {
+    // Initialize
+    loadFromLocal();
+    // Optional auto-fetch if namespace and tag exist
+    if (namespaceInput.value.trim() && tagInput.value.trim()) {
         fetchEmails();
     }
 </script>
